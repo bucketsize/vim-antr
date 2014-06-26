@@ -1,10 +1,10 @@
 vim-antr
 ========
 
-== Description
+Description
 Create java project template and configures with ant for build, single class run and junit test run.
 
-== Commands
+Commands
 Antr - initialize plugin
 AntrSet - configure and for existing standard java source tree
 AntrNew - create a sample ant base java project
