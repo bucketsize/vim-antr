@@ -1,9 +1,0 @@
-Testsuite: com/mycompany/app/MainTest
-Tests run: 1, Failures: 0, Errors: 1, Time elapsed: 0 sec
-
-	Caused an ERROR
-com/mycompany/app/MainTest
-java.lang.ClassNotFoundException: com/mycompany/app/MainTest
-	at java.lang.Class.forName0(Native Method)
-	at java.lang.Class.forName(Class.java:264)
-
