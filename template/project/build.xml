@@ -1,0 +1,94 @@
+<project>
+  <!-- all config properties, edit this instead of .xml -->
+  <property file="build.properties"/>
+
+  <!-- set CLASSPATH argument -->
+  <path id="dir.classes">
+    <pathelement location="${project.builddir}/classes"/>
+  </path>
+  <path id="lib.jars">
+    <fileset dir="${project.libdir}/">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+
+  <target name="compile" >
+    <mkdir dir="${project.builddir}/classes"/>
+    <javac srcdir="${project.srcdir}" destdir="${project.builddir}/classes" includeantruntime="false">
+      <classpath refid="lib.jars" />
+    </javac>
+  </target>
+
+  <target name="jar">
+    <mkdir dir="${project.builddir}/jar"/>
+    <jar destfile="${project.builddir}/jar/${project.name}.jar" basedir="target/classes">
+      <manifest>
+        <attribute name="Main-Class" value="${project.main}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- run a main class with -Dmain=CLASSNAME -->
+  <target name="run-main">
+    <java 
+      classname="${name}"  
+      fork="true">
+      <classpath refid="lib.jars" />
+      <classpath refid="dir.classes" />
+    </java>
+  </target>
+
+  
+  <!-- run a Junit class from java cmd line with -Dtest=CLASSNAME  -->
+  <target name="run-junit">
+    <java 
+      classname="org.junit.runner.JUnitCore"  
+      fork="true">
+      <arg value="${name}"/> 
+      <classpath refid="lib.jars" />
+      <classpath refid="dir.classes" />
+    </java>
+  </target>
+
+  <!-- junit ant integration, need ant-junit.jar in ./lib/ -->
+  <!-- single test -Dtest=CLASS_NAME -->
+  <target name="run-test">
+    <mkdir dir="${project.reportsdir}"/>
+    <junit printsummary="yes" haltonfailure="no">
+
+      <classpath refid="lib.jars" />
+      <classpath refid="dir.classes" />
+
+      <formatter type="plain"/>
+
+      <test name="${name}" haltonfailure="no" outfile="result">
+        <formatter type="xml"/>
+      </test>
+      
+    </junit>
+  </target>
+
+  <!-- batch tests -->
+  <target name="run-tests">
+    <mkdir dir="${project.reportsdir}"/>
+    <junit printsummary="yes" haltonfailure="no">
+
+      <classpath refid="lib.jars" />
+      <classpath refid="dir.classes" />
+
+      <formatter type="plain"/>
+      
+      <batchtest fork="yes" todir="${project.reportsdir}">
+        <fileset dir="${project.testsdir}">
+          <include name="**/*Test*.java"/>
+          <exclude name="**/AllTests.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+</project>

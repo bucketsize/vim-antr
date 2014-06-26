@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="1" failures="0" hostname="debugger" name="com/mycompany/app/MainTest" tests="1" time="0.0" timestamp="2014-06-22T18:24:45">
+  <properties>
+    <property name="ant.project.invoked-targets" value="run-test" />
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+    <property name="project.reportsdir" value="target/reports" />
+    <property name="project.name" value="PROJECT_NAME" />
+    <property name="project.testsdir" value="src/test" />
+    <property name="sun.boot.library.path" value="/home/jb/local/jdk1.7.0_11/jre/lib/i386" />
+    <property name="java.vm.version" value="23.6-b04" />
+    <property name="ant.library.dir" value="/home/jb/local/apache-ant-1.8.4/lib" />
+    <property name="ant.version" value="Apache Ant(TM) version 1.8.4 compiled on May 22 2012" />
+    <property name="ant.java.version" value="1.7" />
+    <property name="java.vm.vendor" value="Oracle Corporation" />
+    <property name="java.vendor.url" value="http://java.oracle.com/" />
+    <property name="path.separator" value=":" />
+    <property name="java.vm.name" value="Java HotSpot(TM) Client VM" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="user.country" value="US" />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="user.dir" value="/home/jb/.vim/bundle/antr/template/project" />
+    <property name="java.runtime.version" value="1.7.0_11-b21" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="project.libdir" value="lib" />
+    <property name="basedir" value="/home/jb/.vim/bundle/antr/template/project" />
+    <property name="java.endorsed.dirs" value="/home/jb/local/jdk1.7.0_11/jre/lib/endorsed" />
+    <property name="os.arch" value="i386" />
+    <property name="name" value="com/mycompany/app/MainTest" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="ant.core.lib" value="/home/jb/local/apache-ant-1.8.4/lib/ant.jar" />
+    <property name="line.separator" value="&#xa;" />
+    <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+    <property name="os.name" value="Linux" />
+    <property name="ant.home" value="/home/jb/local/apache-ant-1.8.4" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="java.library.path" value="/usr/java/packages/lib/i386:/lib:/usr/lib" />
+    <property name="java.class.version" value="51.0" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="sun.management.compiler" value="HotSpot Client Compiler" />
+    <property name="os.version" value="3.13.0-24-generic" />
+    <property name="ant.file" value="/home/jb/.vim/bundle/antr/template/project/build.xml" />
+    <property name="project.builddir" value="target" />
+    <property name="user.home" value="/home/jb" />
+    <property name="user.timezone" value="" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="java.specification.version" value="1.7" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="java.class.path" value="/home/jb/local/apache-ant-1.8.4/lib/ant-launcher.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-jai.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-jmf.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-commons-net.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-junit4.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-resolver.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-javamail.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-commons-logging.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-jdepend.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-junit.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-testutil.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-launcher.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-bcel.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-netrexx.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-oro.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-xalan2.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-jsch.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-antlr.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-log4j.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-regexp.jar:/home/jb/local/apache-ant-1.8.4/lib/ant.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-swing.jar:/home/jb/local/apache-ant-1.8.4/lib/ant-apache-bsf.jar:/home/jb/local/jdk1.7.0_11/lib/tools.jar" />
+    <property name="user.name" value="jb" />
+    <property name="java.vm.specification.version" value="1.7" />
+    <property name="java.home" value="/home/jb/local/jdk1.7.0_11/jre" />
+    <property name="sun.java.command" value="org.apache.tools.ant.launch.Launcher -cp  run-test -Dname=com/mycompany/app/MainTest" />
+    <property name="sun.arch.data.model" value="32" />
+    <property name="user.language" value="en" />
+    <property name="java.specification.vendor" value="Oracle Corporation" />
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="java.version" value="1.7.0_11" />
+    <property name="project.srcdir" value="src" />
+    <property name="java.ext.dirs" value="/home/jb/local/jdk1.7.0_11/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="sun.boot.class.path" value="/home/jb/local/jdk1.7.0_11/jre/lib/resources.jar:/home/jb/local/jdk1.7.0_11/jre/lib/rt.jar:/home/jb/local/jdk1.7.0_11/jre/lib/sunrsasign.jar:/home/jb/local/jdk1.7.0_11/jre/lib/jsse.jar:/home/jb/local/jdk1.7.0_11/jre/lib/jce.jar:/home/jb/local/jdk1.7.0_11/jre/lib/charsets.jar:/home/jb/local/jdk1.7.0_11/jre/lib/jfr.jar:/home/jb/local/jdk1.7.0_11/jre/classes" />
+    <property name="java.vendor" value="Oracle Corporation" />
+    <property name="file.separator" value="/" />
+    <property name="project.main" value="Main" />
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="ant.file.type" value="file" />
+    <property name="sun.cpu.isalist" value="" />
+  </properties>
+  <error message="com/mycompany/app/MainTest" type="java.lang.ClassNotFoundException">java.lang.ClassNotFoundException: com/mycompany/app/MainTest
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:264)
+</error>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
