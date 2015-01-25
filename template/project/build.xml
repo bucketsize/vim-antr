@@ -1,6 +1,13 @@
 <project>
-  <!-- all config properties, edit this instead of .xml -->
-  <property file="build.properties"/>
+
+  <!-- project specific properties -->
+  <property name="project.name" location="PROJECT_NAME" />
+  <property name="project.main" location="Main" />
+  <property name="project.builddir" location="target" />
+  <property name="project.libdir" location="lib" />
+  <property name="project.srcdir" location="src" />
+  <property name="project.testsdir" location="src/test" />
+  <property name="project.reportsdir" location="target/reports" />
 
   <!-- set CLASSPATH argument -->
   <path id="dir.classes">
