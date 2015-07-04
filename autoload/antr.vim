@@ -6,10 +6,11 @@ echom "Antr loaded"
 
 " init
 let g:antr_loaded=1
-  
 let g:antr_plugin_path=expand('<sfile>:p:h')
 
 " public functions
+
+" entry point to init
 func! antr#Antr()
   let g:antr_project_path=expand('%:p:h')
 
@@ -17,27 +18,36 @@ func! antr#Antr()
   exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
 endfunc
 
+" func mapping; always delegating to ruby methods
+" avoid doing anything in vim-script
+func! SetBuilder(pname)
+  ruby Antr::Tasks.setBuilder(VIM::evaluate('a:pname'))
+endfunc
+
 func! SetProject(pname)
-  ruby Antr::Tasks.set_project(VIM::evaluate('a:pname'))
+  ruby Antr::Tasks.setProject(VIM::evaluate('a:pname'))
 endfunc
 
 funct! CreateProject(pname)
-  ruby Antr::Tasks.create_project(VIM::evaluate('a:pname'))
+  ruby Antr::Tasks.createProject(VIM::evaluate('a:pname'))
 endfunc
 
 funct! RunMain(c_name)
-  ruby Antr::Tasks.make_run(VIM::evaluate('a:c_name'))
+  ruby Antr::Tasks.makeRun(VIM::evaluate('a:c_name'))
 endfunc
 
 func! SetMakeAsAntRun()
-  ruby Antr::Tasks.make_run(VIM::evaluate('expand("%:t:r")'))
+  ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
 func! SetMakeAsAntTest()
-  ruby Antr::Tasks.make_test(VIM::evaluate('expand("%:t:r")'))
+  ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
 func! SetMakeAsAntCompile()
-  ruby Antr::Tasks.make_compile()
+  ruby Antr::Tasks.makeCompile()
 endfunc
 
+func! SetMakeAsAntClean()
+  ruby Antr::Tasks.makeClean()
+endfunc

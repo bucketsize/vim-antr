@@ -19,8 +19,8 @@
     </fileset>
   </path>
 
-  <target name="clean">
-    <delete dir="build"/>
+	<target name="clean">
+    <delete dir="${project.builddir}"/>
   </target>
 
   <target name="compile" >
