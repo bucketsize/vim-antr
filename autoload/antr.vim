@@ -16,6 +16,13 @@ func! antr#Antr()
 
   " load ruby script (require)
   exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
+
+	" load libs
+	AntrParseLibs
+
+	" load javacomplete
+	JavaCompleteRestart
+
 endfunc
 
 " func mapping; always delegating to ruby methods
@@ -50,4 +57,8 @@ endfunc
 
 func! SetMakeAsAntClean()
   ruby Antr::Tasks.makeClean()
+endfunc
+
+func! ParseLibDirs()
+  ruby Antr::Tasks.parseLibDirs()
 endfunc

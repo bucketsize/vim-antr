@@ -3,13 +3,16 @@ module Antr
 	# the builder interface
 	module Builder
 		def cmd(a,b,c=Nil)
-			throw "overide!"
+			raise "overide!"
 		end
 		def efm
-			throw "overide!"
+			raise "overide!"
 		end
 		def files
-			throw "overide!"
+			raise "overide!"
+		end
+		def libDirs
+			raise "overide!"
 		end
 	end
 

@@ -120,5 +120,21 @@ module Antr
 		def self.makeClean()
 			Utils.setupMake(@@builder, 'clean')
 		end
+
+		def self.parseLibDirs
+			jars = []
+			@@builder.libDirs.each do |folder|
+				jars = jars + 
+					Dir
+					.entries(File.join(@@path_project, folder))
+					.select {|f| (!File.directory?(f) && File.extname(f) == '.jar') }
+					.map {|f| File.join(@@path_project, f)}
+			end
+
+			jars.each do |jar|
+				Antr.log("parsing jar: #{jar}")
+				VIM::evaluate("'call javacomplete#AddClassPath(#{jar})'")
+			end
+		end
   end
 end

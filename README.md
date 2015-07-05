@@ -24,3 +24,39 @@ Commands
 * AntrTest - launch junit test in current buffer
 * AntrClean - clean project
 
+Other plugins
+-------------
+- [javacomplete] (https://github.com/paretje/javacomplete)
+
+Note: 
+
+nailgun is autostart from `java/lib/` 
+
+loads `java...jar` from `java/target/`
+```bash 
+	cd ~/.vim/bundle/javacomplete/java
+	mvn clean install
+```
+
+In `java/pom.xml` set `jdk-tools` dependency to systempath, as it fails to find from repo.
+
+```xml
+		<dependency>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk-tools</artifactId>
+			<scope>system</scope>
+			<version>1.8</version>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
+```
+
+.vimrc
+```viml
+let g:nailgun_port='2113'
+let g:javacomplete_ng='ng-nailgun'
+autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+autocmd Filetype java map <leader>b :call javacomplete#GoToDefinition()<CR>
+
+```
+
+

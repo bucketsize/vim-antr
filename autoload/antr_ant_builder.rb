@@ -52,5 +52,9 @@ module Antr
 			}
 		end
 
+		def libDirs
+			['lib/']
+		end
+
 	end
 end
