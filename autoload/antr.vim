@@ -12,53 +12,67 @@ let g:antr_plugin_path=expand('<sfile>:p:h')
 
 " entry point to init
 func! antr#Antr()
-  let g:antr_project_path=expand('%:p:h')
+	let g:antr_project_path=expand('%:p:h')
 
-  " load ruby script (require)
-  exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
+	" load ruby script (require)
+	exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
 
 	" load libs
-	AntrParseLibs
+	"call ParseLibDirs()
 
 	" load javacomplete
-	JavaCompleteRestart
+	"call javacomplete#Reinitialize()
 
 endfunc
 
 " func mapping; always delegating to ruby methods
 " avoid doing anything in vim-script
 func! SetBuilder(pname)
-  ruby Antr::Tasks.setBuilder(VIM::evaluate('a:pname'))
+	ruby Antr::Tasks.setBuilder(VIM::evaluate('a:pname'))
 endfunc
 
 func! SetProject(pname)
-  ruby Antr::Tasks.setProject(VIM::evaluate('a:pname'))
+	ruby Antr::Tasks.setProject(VIM::evaluate('a:pname'))
 endfunc
 
 funct! CreateProject(pname)
-  ruby Antr::Tasks.createProject(VIM::evaluate('a:pname'))
+	ruby Antr::Tasks.createProject(VIM::evaluate('a:pname'))
 endfunc
 
 funct! RunMain(c_name)
-  ruby Antr::Tasks.makeRun(VIM::evaluate('a:c_name'))
+	ruby Antr::Tasks.makeRun(VIM::evaluate('a:c_name'))
 endfunc
 
 func! SetMakeAsAntRun()
-  ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%:t:r")'))
+	ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
 func! SetMakeAsAntTest()
-  ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
+	ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
 func! SetMakeAsAntCompile()
-  ruby Antr::Tasks.makeCompile()
+	ruby Antr::Tasks.makeCompile()
 endfunc
 
 func! SetMakeAsAntClean()
-  ruby Antr::Tasks.makeClean()
+	ruby Antr::Tasks.makeClean()
 endfunc
 
 func! ParseLibDirs()
-  ruby Antr::Tasks.parseLibDirs()
+	ruby Antr::Tasks.parseLibDirs()
+endfunc
+
+
+func! antr#ListSymbols(findstart, base)
+	exec "rubyf ".g:antr_plugin_path."/antr_completer.rb"
+	if a:findstart
+		ruby Antr::Completer.findStart(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')") )
+		return g:rval
+	endif
+
+	ruby Antr::Completer.complete('test')
+	echom "c:" . g:rval
+	return split(g:rval, ",")
+
 endfunc
