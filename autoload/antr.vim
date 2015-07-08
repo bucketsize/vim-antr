@@ -68,7 +68,14 @@ func! antr#ListSymbols(findstart, base)
 	endif
 
 	ruby Antr::Completer.ctags('test')
-	echom "c:" . g:rval
-	return split(g:rval, ",")
 
+	let a:list = split(g:rval, ",")
+	call map(a:list, 'Rf(v:val)')
+	
+	return a:list
+endfunc
+
+func! Rf(x)
+	let a:list = split(a:x, "-")
+	return {'word': a:list[0], 'menu': a:list[1], 'type': 'f'}
 endfunc

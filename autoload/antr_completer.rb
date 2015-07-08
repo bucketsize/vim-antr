@@ -9,13 +9,18 @@ module Antr
 			@@parsed = []
 
 			def findStart(line, col)
-				Antr.log("#{line}, #{col}")
+				Antr.log("findStart: #{line}, #{col}")
 				Antr.return(col)
 			end
 
 			def ctags(tag)
+				Antr.log("ctags: #{tag}")
+				
 				# search and return set
-				@@ctagsList.join(',')
+				tags = @@ctagsList.join(',') 
+				
+				Antr.log("returning: #{tags}")
+				Antr.return(tags)
 			end
 
 			def updateCtags(jarfile)
@@ -31,8 +36,16 @@ module Antr
 					cmd="java -cp #{cp.join(':')} com.project.AntrHelper #{jarfile}"
 					Antr.log("java: #{cmd}")
 
-					r=`#{cmd}`
-					@@ctagsList = @@ctagsList + r.split(',')	
+					_r=`#{cmd}`
+					_ra = _r.split(':')
+						
+					#_list =	_ra[1].split(',').map do |e| 
+						#_e = e.split('-')
+						#"{'word':#{_e[0]}, 'menu':#{_e[1]}}" 
+					#end
+			
+					_list = _ra[1].split(',').map{|e| e.strip}
+					@@ctagsList = @@ctagsList + _list 
 				end
 			end
 
