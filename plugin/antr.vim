@@ -1,4 +1,5 @@
 command! -nargs=* Antr      call antr#Antr()
+
 command! -nargs=* AntrBld   call SetBuilder( '<args>' )
 command! -nargs=* AntrSet   call SetProject( '<args>' )
 command! -nargs=* AntrNew   call CreateProject( '<args>' )
@@ -12,6 +13,3 @@ map <F9>  :call SetMakeAsAntCompile()<Return>:make<Return>:copen<Return>
 
 "map <leader>AntRun  :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
 "map <leader>AntTest :call SetMakeAsAntTest()<CR>:make<CR>:copen<CR>
-
-
-

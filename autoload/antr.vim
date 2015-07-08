@@ -16,13 +16,10 @@ func! antr#Antr()
 
 	" load ruby script (require)
 	exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
+	exec "rubyf ".g:antr_plugin_path."/antr_completer.rb"
 
 	" load libs
-	"call ParseLibDirs()
-
-	" load javacomplete
-	"call javacomplete#Reinitialize()
-
+	call ParseLibDirs()
 endfunc
 
 " func mapping; always delegating to ruby methods
@@ -60,18 +57,17 @@ func! SetMakeAsAntClean()
 endfunc
 
 func! ParseLibDirs()
-	ruby Antr::Tasks.parseLibDirs()
+	ruby Antr::Completer.parseLibDirs()
 endfunc
 
 
 func! antr#ListSymbols(findstart, base)
-	exec "rubyf ".g:antr_plugin_path."/antr_completer.rb"
 	if a:findstart
 		ruby Antr::Completer.findStart(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')") )
 		return g:rval
 	endif
 
-	ruby Antr::Completer.complete('test')
+	ruby Antr::Completer.ctags('test')
 	echom "c:" . g:rval
 	return split(g:rval, ",")
 
