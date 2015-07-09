@@ -77,5 +77,8 @@ endfunc
 
 func! Rf(x)
 	let a:list = split(a:x, "-")
+	if len(a:list) == 0 
+		return ""
+	endif
 	return {'word': a:list[0], 'menu': a:list[1], 'type': 'f'}
 endfunc
