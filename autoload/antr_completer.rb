@@ -10,14 +10,27 @@ module Antr
 
 			def findStart(line, col)
 				Antr.log("findStart: #{line}, #{col}")
-				Antr.return(col)
+				start=if line.index(' ').nil?
+					0
+				else
+					line.index(' ')+1
+				end
+
+				@tag = line[start, line.length]
+				
+				Antr.return(start)
 			end
 
-			def ctags(tag)
-				Antr.log("ctags: #{tag}")
+			def ctags(line, col)
+				Antr.log("ctags: #{@tag}")
 				
 				# search and return set
-				tags = @@ctagsList.join(',') 
+				tags = 
+					@@ctagsList
+						.select do |t|
+							/^#{@tag}/ =~ t
+						end
+						.join(',')
 				
 				Antr.log("returning: #{tags}")
 				Antr.return(tags)

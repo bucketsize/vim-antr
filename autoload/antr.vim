@@ -63,11 +63,11 @@ endfunc
 
 func! antr#ListSymbols(findstart, base)
 	if a:findstart
-		ruby Antr::Completer.findStart(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')") )
+		ruby Antr::Completer.findStart(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')"))
 		return g:rval
 	endif
 
-	ruby Antr::Completer.ctags('test')
+	ruby Antr::Completer.ctags(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')"))
 
 	let a:list = split(g:rval, ",")
 	call map(a:list, 'Rf(v:val)')
@@ -80,5 +80,5 @@ func! Rf(x)
 	if len(a:list) == 0 
 		return ""
 	endif
-	return {'word': a:list[0], 'menu': a:list[1], 'type': 'f'}
+	return {'word': a:list[0], 'menu': a:list[1], 'kind': 'f'}
 endfunc
