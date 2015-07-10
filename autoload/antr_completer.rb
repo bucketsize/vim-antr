@@ -2,38 +2,93 @@ require_relative 'antr_helper'
 require_relative 'antr_tasks'
 
 module Antr
+	# handle Completion in the following cases:
+	#
+	# - complete partial Type 
+	# | tags [0-p], [;-p]
+	#
+	# - complete constructors 
+	# | tags [after new+space] 
+	#
+	# - suggest constructor overrides 
+	# | tags [new+space+col]
+	#
+	# - suggest methods on instance variables 
+	# | tags [ctor+.] [ctor+.+p] [vars after Type+space]
 	class Completer
 		class << self
 
+					@cp = []
+					@cp << File.join(pluginPath, 'java/target/classes')
+					@cp << File.join(pluginPath, 'java/lib/bcel-5.2.jar')
+
 			@@ctagsList = []
+			@@ctagsCtorsList = []
 			@@parsed = []
 
-			def findStart(line, col)
-				Antr.log("findStart: #{line}, #{col}")
-				start=if line.index(' ').nil?
-					0
-				else
-					line.index(' ')+1
-				end
+			def col(line, col)
 
-				@tag = line[start, line.length]
+				#start = 
+					#[' ','\t', ';']
+					#.map do |sep|
+						#line.rindex(sep).nil? ? 0 : line.rindex(sep)+1
+					#end
+					#.sort
+					#.last
+
+				#@tag = line[start, line.length]
+				@tags = line.split(/\ |\t|;/)
+				@tag  = @tags.last
+
+				start = line.length - @tag.length
 				
+				Antr.log("findStart: #{line}, #{col}: #{start}")
+				Antr.log("tags: #{@tags}")
 				Antr.return(start)
 			end
 
 			def ctags(line, col)
 				Antr.log("ctags: #{@tag}")
-				
-				# search and return set
-				tags = 
-					@@ctagsList
-						.select do |t|
-							/^#{@tag}/ =~ t
-						end
+			
+				# if tag is pre-constructor
+				if (@tag.strip == 'new') 
+					@tag = @tags[-3]
+					ctagsOfClasses(@tags)
+				elsif (@tag.strip != @tags[-4])
+					@tag = @tags[-4]
+					ctagsOfClasses(@tags)
+				elsif (@tag.strip == @tags[-4])
+					@tag = @tags[-4]
+					ctagsOfCtor(@tags)
+				end
+
+			end
+
+			def ctagsOfClasses(tag)
+				tags = ctagsSearch(@ctagsList, tag) 
 						.join(',')
 				
-				Antr.log("returning: #{tags}")
+				Antr.log("ctags: #{tags}")
 				Antr.return(tags)
+			end
+
+			def ctagsOfCtors(tag)
+				classes = ctagsSearch(@ctagsList, tag) 
+						.join(',')
+	
+				updateCtagsCtors(classes)
+				
+				Antr.log("ctags ctors: #{tags}")
+				Antr.return(tags)
+			end
+
+			def ctagsOfMethods(tag)
+			end
+
+			def ctagsSearch(list, tag)
+				list.select do |t|
+					/^#{tag}/ =~ t
+				end
 			end
 
 			def updateCtags(jarfile)
@@ -42,23 +97,27 @@ module Antr
 				if not @@parsed.include? jarfile
 					Antr.log("parsing jar: #{jarfile}")
 					@@parsed << jarfile
-					cp = []
-					cp << File.join(pluginPath, 'java/classes')
-					cp << File.join(pluginPath, 'java/lib/bcel-5.2.jar')
 
-					cmd="java -cp #{cp.join(':')} com.project.AntrHelper #{jarfile}"
+					cmd="java -cp #{@cp.join(':')} com.project.AntrHelper class #{jarfile}"
 					Antr.log("java: #{cmd}")
 
 					_r=`#{cmd}`
-					_ra = _r.split(':')
 						
-					#_list =	_ra[1].split(',').map do |e| 
-						#_e = e.split('-')
-						#"{'word':#{_e[0]}, 'menu':#{_e[1]}}" 
-					#end
+					_list = _r.split(',').map{|e| e.strip}
+					@@ctagsList += _list 
+				end
+			end
 			
-					_list = _ra[1].split(',').map{|e| e.strip}
-					@@ctagsList = @@ctagsList + _list 
+			def updateCtagsCtors(classes)
+				classes.each do |x|
+					l=x.split(x,'-')
+
+					cmd="java -cp #{@cp.join(':')} com.project.AntrHelper ctor #{l[2]} #{l[1]}.#{l[0]}"
+					Antr.log("java: #{cmd}")
+
+					_r=`#{cmd}`
+					_list = _r.split(',').map{|e| e.strip}
+					@@ctagsCtorsList += _list
 				end
 			end
 

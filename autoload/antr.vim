@@ -63,7 +63,7 @@ endfunc
 
 func! antr#ListSymbols(findstart, base)
 	if a:findstart
-		ruby Antr::Completer.findStart(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')"))
+		ruby Antr::Completer.col(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')"))
 		return g:rval
 	endif
 
