@@ -18,13 +18,13 @@ module Antr
 	class Completer
 		class << self
 
-					@cp = []
-					@cp << File.join(pluginPath, 'java/target/classes')
-					@cp << File.join(pluginPath, 'java/lib/bcel-5.2.jar')
+			@@cp = []
+			@@cp << File.join(Antr::Tasks.getPluginPath(), 'java/target/classes')
+			@@cp << File.join(Antr::Tasks.getPluginPath(), 'java/lib/bcel-5.2.jar')
 
-			@@ctagsList = []
-			@@ctagsCtorsList = []
 			@@parsed = []
+			@@ctagsList = []
+			@@ctagsMethodsList = []
 
 			def col(line, col)
 
@@ -53,13 +53,13 @@ module Antr
 				# if tag is pre-constructor
 				if (@tag.strip == 'new') 
 					@tag = @tags[-3]
-					ctagsOfClasses(@tags)
+					ctagsOfClasses(@tag)
 				elsif (@tag.strip != @tags[-4])
 					@tag = @tags[-4]
-					ctagsOfClasses(@tags)
+					ctagsOfClasses(@tag)
 				elsif (@tag.strip == @tags[-4])
 					@tag = @tags[-4]
-					ctagsOfCtor(@tags)
+					ctagsOfMethods(@tag)
 				end
 
 			end
@@ -72,11 +72,11 @@ module Antr
 				Antr.return(tags)
 			end
 
-			def ctagsOfCtors(tag)
+			def ctagsOfMethods(tag)
 				classes = ctagsSearch(@ctagsList, tag) 
 						.join(',')
 	
-				updateCtagsCtors(classes)
+				updateCtagsMethods(classes)
 				
 				Antr.log("ctags ctors: #{tags}")
 				Antr.return(tags)
@@ -93,12 +93,11 @@ module Antr
 
 			def updateCtags(jarfile)
 				Antr.log("updateCtags ...")
-				pluginPath = Antr::Tasks.getPluginPath()
 				if not @@parsed.include? jarfile
 					Antr.log("parsing jar: #{jarfile}")
 					@@parsed << jarfile
 
-					cmd="java -cp #{@cp.join(':')} com.project.AntrHelper class #{jarfile}"
+					cmd="java -cp #{@@cp.join(':')} com.project.AntrHelper classes #{jarfile}"
 					Antr.log("java: #{cmd}")
 
 					_r=`#{cmd}`
@@ -108,18 +107,23 @@ module Antr
 				end
 			end
 			
-			def updateCtagsCtors(classes)
+			def updateCtagsMethods(classes)
+				m={}
 				classes.each do |x|
 					l=x.split(x,'-')
+					m[l[2]] = [] if m[l[2]].nil? 
+					m[l[2]] << l[1]+'.'+l[0]
+				end
 
-					cmd="java -cp #{@cp.join(':')} com.project.AntrHelper ctor #{l[2]} #{l[1]}.#{l[0]}"
+				m.each_entry do |k, v|
+					cmd="java -cp #{@@cp.join(':')} com.project.AntrHelper methods #{k} #{v.join(',')}"
 					Antr.log("java: #{cmd}")
 
 					_r=`#{cmd}`
 					_list = _r.split(',').map{|e| e.strip}
-					@@ctagsCtorsList += _list
+					@@ctagsMethodsList += _list
 				end
-			end
+		 	end
 
 			def parseLibDirs()
 				Antr.log("parseLibDirs ...")
@@ -137,7 +141,9 @@ module Antr
 
 				Antr.log("parseLibDirs => #{jars}")
 				jars.each do |jar|
-					Antr::Completer.updateCtags(jar)
+					if not @@parsed.include? jar
+						Antr::Completer.updateCtags(jar)
+					end
 				end
 			end
 

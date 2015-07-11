@@ -2,92 +2,125 @@ package com.project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
 
 public class AntrHelper{
 
-	public String getClasses(final String jarFilename){
+	private String getClasses(final String jarFilename){
+		StringBuilder classes = new StringBuilder();
+
+		Iterator<String> entries = getAllClasses(jarFilename).listIterator();
+		while(entries.hasNext()) {
+			final String className = entries.next();
+			ClassParser cp = new ClassParser(jarFilename,className);
+
+			JavaClass jc=null;
+			try{
+				jc = cp.parse();
+			}catch(Exception e){
+				System.out.println(e);
+			}
+
+			String fqcn = jc.getClassName();
+			int s = fqcn.lastIndexOf(".");
+
+			String p = fqcn.substring(0,s).trim();
+			String c = fqcn.substring(s+1).trim();
+
+			classes.append(c).append("-").append(p).append("-").append(jarFilename);
+			if (entries.hasNext()){
+				classes.append(",");
+			}
+		}
+		return classes.toString();
+	}
+
+	private String getMethods(String jarFilename, String classNames) {
+		StringBuilder classMethods = new StringBuilder();
+
+		Iterator<String> entries = Arrays.asList(classNames.split(",")).listIterator();
+		while(entries.hasNext()) {
+			final String className = entries.next().replace('.', File.separatorChar);
+			ClassParser cp = new ClassParser(jarFilename,className);
+
+			JavaClass jc=null;
+			try{
+				jc = cp.parse();
+			}catch(Exception e){
+				System.out.println(e);
+			}
+
+			final List<Method> _methodEntries = Arrays.asList(jc.getMethods());
+			Iterator<Method> methodEntries = _methodEntries.listIterator(); 
+			while(methodEntries.hasNext()){
+				final Method method = methodEntries.next();
+				classMethods.append(method.getName()).append(":").append(method.getSignature());
+				if (methodEntries.hasNext()){
+					classMethods.append(",");
+				}
+			}
+
+			if (entries.hasNext()){
+				classMethods.append(",");
+			}
+		}
+		return classMethods.toString();
+	}
+
+	private List<String> getAllClasses(final String jarFilename){
 		try(final JarFile jarFile=new JarFile(jarFilename)){
-			StringBuilder classes = new StringBuilder();
-			
+			List<String> classes = new ArrayList<String>();
+
 			final Enumeration<JarEntry> entries = jarFile.entries();			
 			while (entries.hasMoreElements()) {
 				final JarEntry entry = entries.nextElement();
 				final String entryName = entry.getName();
 				if (entryName.endsWith(".class")){
 					String className = entryName.replace('/', File.separatorChar);
-					ClassParser cp = new ClassParser(jarFilename,className);
-					
-					JavaClass jc=null;
-					try{
-						jc = cp.parse();
-					}catch(Exception e){
-						System.out.println(e);
-					}
-					
-					String fqcn = jc.getClassName();
-					int s = fqcn.lastIndexOf(".");
-					
-					String p = fqcn.substring(0,s).trim();
-					String c = fqcn.substring(s+1).trim();
-
-					classes.append(c).append("-").append(p).append("-").append(jarFilename);
-					if (entries.hasMoreElements()){
-						classes.append(",");
-					}
+					classes.add(className);
 				}
 			}
-			return classes.toString();
+			return classes;
 		}catch(IOException e){
-			return "NONE-NONE";
+			return null;
 		}
 	}
 
+
 	public static void main(String[] argv) {
 		AntrHelper m = new AntrHelper();
-		
+
 		if (argv.length < 1){
-			argv = new String[]{"/tmp/junit-4.11.jar", ""};
+//			argv = new String[]{"classes", "/tmp/junit-4.11.jar", ""};
+			argv = new String[]{"methods", "/tmp/junit-4.11.jar", "Test"};
 		}
-		
-		if ("class".equals(argv[0])){
+
+		if ("classes".equals(argv[0])){
 			String jarFilename = argv[1];
 			String classes = m.getClasses(jarFilename);
 			System.out.println(classes);
 			return;
 		}
-		
-		if ("ctor".equals(argv[0])){
+
+		if ("methods".equals(argv[0])){
 			String jarFilename = argv[1];
-			String className = argv[2];
-			String classes = m.getCtors(jarFilename, className);
-			System.out.println(classes);
+			String classNames = argv[2];
+			String methods = m.getMethods(jarFilename, classNames);
+			System.out.println(methods);
 			return;
 		}
-		
-		if ("ctor".equals(argv[0])){
-			String jarFilename = argv[1];
-			String className = argv[2];
-			String classes = m.getMethods(jarFilename, className);
-			System.out.println(classes);
-			return;
-		}
-		
+
 	}
 
-	private String getMethods(String jarFilename, String className) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String getCtors(String jarFilename, String className) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
