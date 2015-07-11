@@ -15,6 +15,8 @@ module Antr
 	# - run Test Class
 	# - clean TODO
 	class Tasks
+		include Logging
+		extend Logging
 
 		# project builder
 		@@builder = Antr::BuilderFactory.get('ant') 
@@ -27,13 +29,13 @@ module Antr
 		def self.getPluginPath()
 			@@path_plugin
 		end
-		Antr.log("set path_plugin  = #{@@path_plugin}")
+		LOG.info("set path_plugin  = #{@@path_plugin}")
 
 		@@path_project  = VIM::evaluate('g:antr_project_path')
 		def self.getProjectPath()
 			@@path_project
 		end
-		Antr.log("set path_project = #{@@path_project}")
+		LOG.info("set path_project = #{@@path_project}")
 
     # setup Ant for any source tree / project root
     # default build.xml, build.properties are copied
@@ -43,7 +45,7 @@ module Antr
 			cfg = "/../template/#{@@builder.files()[:template]}/#{@@builder.files()[:config]}"
 			lib = "/../template/#{@@builder.files()[:template]}/#{@@builder.files()[:lib_dir]}"
 
-			Antr.log("copying resources #{cfg}, #{lib}")
+			LOG.info("copying resources #{cfg}, #{lib}")
 
       # check if dir is not under Ant
       if File.exist?(@@builder.files()[:config])
@@ -72,7 +74,7 @@ module Antr
       
 			template = "/../template/#{@@builder.files()[:template]}"
 			
-			Antr.log("copying resources #{template} => #{@@path_project}")
+			LOG.info("copying resources #{template} => #{@@path_project}")
       
 			# check if dir is not under Ant
       if File.exist?(@@builder.files()[:config])
