@@ -1,4 +1,5 @@
 require_relative 'antr_helper'
+require_relative 'antr_logger'
 require_relative 'antr_tasks'
 
 module Antr
@@ -17,6 +18,9 @@ module Antr
 	# | tags [ctor+.] [ctor+.+p] [vars after Type+space]
 	class Completer
 		extend Logging
+		
+		L_DELIM = ','
+		F_DELIM = ';'
 
 		class << self
 
@@ -30,6 +34,8 @@ module Antr
 
 			def col(line, col)
 
+				#start of insert
+				# - lastDelimPos+1
 				start =	['\s', '=', ';', '\(', '\)', '\{', '\}']
 					.map do |sep|
 						line.rindex(/#{sep}/).nil? ? 0 : line.rindex(/#{sep}/)+1
@@ -37,7 +43,14 @@ module Antr
 					.sort
 					.last
 
-				@tag = line[start, line.length]
+				
+				@tag = line[start, line.length].strip
+				
+				# if tag=modifiers like [new]
+				# - lastDelimPos + len(new)+1(space)
+				if ['new'].include? @tag
+					start += (@tag.length + 2)
+				end
 
 				@tags = line.split(/\s|=|;|\)|\(|\{|\}/).select do |t|
 					!t.empty?
@@ -54,16 +67,20 @@ module Antr
 			def ctags(line, col)
 				LOG.info("ctags: #{@tag}")
 
-				# if tag is pre-constructor
-				if (@tag.strip == 'new') 
+				# ctor
+				# - pre-ctor 	[ .. a=new|]
+				if (@tag == 'new') 
 					@tag = @tags[-3]
 					ctagsOfClasses(@tag)
-				elsif (@tag.strip == @tags[-4])
-					@tag = @tags[-4]
+				# - pre-ctor	[ .. a=new |]
+				elsif (@tag.empty? and @tags[-1] == 'new')
+					@tag = @tags[-3]
 					ctagsOfMethods(@tag)
-				elsif (/^#{@tag.strip}/ =~ @tags[-4])
+				# - partial-ctor [ .. a=new An|]
+				elsif (/^#{@tag}/ =~ @tags[-3])
 					@tag = @tags[-4]
 					ctagsOfClasses(@tag)
+				# - Type var decl [ ..  An|]
 				else
 					ctagsOfClasses(@tag)
 				end
@@ -73,21 +90,19 @@ module Antr
 		def ctagsOfClasses(tag)
 			LOG.info("ctagsOfClasses: #{tag}")
 			tags = ctagsSearch(@@ctagsList, tag) 
-			.join(',')
 
 			LOG.info("ctags: #{tags}")
-			Antr.return(tags)
+			Antr.return(tags.join(','))
 		end
 
 		def ctagsOfMethods(tag)
 			LOG.info("ctagsOfMethod: #{tag}")
 			classes = ctagsSearch(@@ctagsList, tag) 
-			.join(',')
 
-			updateCtagsMethods(classes)
+			tags = updateCtagsMethods(classes)
 
 			LOG.info("ctags ctors: #{tags}")
-			Antr.return(tags)
+			Antr.return(tags.join(','))
 		end
 
 		def ctagsSearch(list, tag)
@@ -108,16 +123,17 @@ module Antr
 
 				_r=`#{cmd}`
 
-				_list = _r.split(',').map{|e| e.strip}
+				_list = _r.split(L_DELIM).map{|e| e.strip}
 				@@ctagsList += _list 
 			end
 		end
 
 		def updateCtagsMethods(classes)
-			LOG.info("updateCtagsMethods ...")
+			LOG.info("updateCtagsMethods: #{classes}")
 			m={}
 			classes.each do |x|
-				l=x.split(x,'-')
+				l=x.split(F_DELIM)
+				LOG.info("lookup methods: #{l}")
 				m[l[2]] = [] if m[l[2]].nil? 
 				m[l[2]] << l[1]+'.'+l[0]
 			end
@@ -127,7 +143,7 @@ module Antr
 				LOG.info("java: #{cmd}")
 
 				_r=`#{cmd}`
-				_list = _r.split(',').map{|e| e.strip}
+				_list = _r.split(L_DELIM).map{|e| e.strip}
 				@@ctagsMethodsList += _list
 			end
 		end

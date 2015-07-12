@@ -16,6 +16,9 @@ import org.apache.bcel.classfile.Method;
 
 public class AntrHelper{
 
+	private final String L_DELIM = ",";
+	private final String F_DELIM = ";";
+
 	private String getClasses(final String jarFilename){
 		StringBuilder classes = new StringBuilder();
 
@@ -37,9 +40,9 @@ public class AntrHelper{
 			String p = fqcn.substring(0,s).trim();
 			String c = fqcn.substring(s+1).trim();
 
-			classes.append(c).append("-").append(p).append("-").append(jarFilename);
+			classes.append(c).append(F_DELIM).append(p).append(F_DELIM).append(jarFilename);
 			if (entries.hasNext()){
-				classes.append(",");
+				classes.append(L_DELIM);
 			}
 		}
 		return classes.toString();
@@ -48,7 +51,7 @@ public class AntrHelper{
 	private String getMethods(String jarFilename, String classNames) {
 		StringBuilder classMethods = new StringBuilder();
 
-		Iterator<String> entries = Arrays.asList(classNames.split(",")).listIterator();
+		Iterator<String> entries = Arrays.asList(classNames.split(L_DELIM)).listIterator();
 		while(entries.hasNext()) {
 			final String className = entries.next().replace('.', File.separatorChar);
 			ClassParser cp = new ClassParser(jarFilename,className);
@@ -66,12 +69,12 @@ public class AntrHelper{
 				final Method method = methodEntries.next();
 				classMethods.append(method.getName()).append(":").append(method.getSignature());
 				if (methodEntries.hasNext()){
-					classMethods.append(",");
+					classMethods.append(L_DELIM);
 				}
 			}
 
 			if (entries.hasNext()){
-				classMethods.append(",");
+				classMethods.append(L_DELIM);
 			}
 		}
 		return classMethods.toString();

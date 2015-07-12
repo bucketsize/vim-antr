@@ -60,7 +60,6 @@ func! ParseLibDirs()
 	ruby Antr::Completer.parseLibDirs()
 endfunc
 
-
 func! antr#ListSymbols(findstart, base)
 	if a:findstart
 		ruby Antr::Completer.col(VIM::evaluate("getline('.')"),	VIM::evaluate("col('.')"))
