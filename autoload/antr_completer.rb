@@ -92,7 +92,7 @@ module Antr
 			tags = ctagsSearch(@@ctagsList, tag) 
 
 			LOG.info("ctags: #{tags}")
-			Antr.return(tags.join(','))
+			Antr.return(tags.join(L_DELIM))
 		end
 
 		def ctagsOfMethods(tag)
@@ -102,7 +102,7 @@ module Antr
 			tags = updateCtagsMethods(classes)
 
 			LOG.info("ctags ctors: #{tags}")
-			Antr.return(tags.join(','))
+			Antr.return(tags.join(L_DELIM))
 		end
 
 		def ctagsSearch(list, tag)
@@ -122,6 +122,7 @@ module Antr
 				LOG.info("java: #{cmd}")
 
 				_r=`#{cmd}`
+				LOG.info("java> #{_r}")
 
 				_list = _r.split(L_DELIM).map{|e| e.strip}
 				@@ctagsList += _list 
@@ -143,6 +144,8 @@ module Antr
 				LOG.info("java: #{cmd}")
 
 				_r=`#{cmd}`
+				LOG.info("java> #{_r}")
+				
 				_list = _r.split(L_DELIM).map{|e| e.strip}
 				@@ctagsMethodsList += _list
 			end

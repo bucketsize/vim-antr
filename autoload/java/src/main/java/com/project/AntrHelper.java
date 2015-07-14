@@ -48,13 +48,11 @@ public class AntrHelper{
 		return classes.toString();
 	}
 
-	private String getMethods(String jarFilename, String classNames) {
+	private String getMethods(final String jarFilename, final String className) {
 		StringBuilder classMethods = new StringBuilder();
 
-		Iterator<String> entries = Arrays.asList(classNames.split(L_DELIM)).listIterator();
-		while(entries.hasNext()) {
-			final String className = entries.next().replace('.', File.separatorChar);
-			ClassParser cp = new ClassParser(jarFilename,className);
+			final String _className = className.replace('.', File.separatorChar)+".class";
+			ClassParser cp = new ClassParser(jarFilename,_className);
 
 			JavaClass jc=null;
 			try{
@@ -67,16 +65,18 @@ public class AntrHelper{
 			Iterator<Method> methodEntries = _methodEntries.listIterator(); 
 			while(methodEntries.hasNext()){
 				final Method method = methodEntries.next();
-				classMethods.append(method.getName()).append(":").append(method.getSignature());
+				String methodName="";
+				if ("<init>".equals(method.getName())){
+					methodName = className;
+				}else{
+					methodName = method.getName();
+				}
+				classMethods.append(methodName).append(F_DELIM).append(method.getSignature());
 				if (methodEntries.hasNext()){
 					classMethods.append(L_DELIM);
 				}
 			}
 
-			if (entries.hasNext()){
-				classMethods.append(L_DELIM);
-			}
-		}
 		return classMethods.toString();
 	}
 
@@ -105,7 +105,7 @@ public class AntrHelper{
 
 		if (argv.length < 1){
 //			argv = new String[]{"classes", "/tmp/junit-4.11.jar", ""};
-			argv = new String[]{"methods", "/tmp/junit-4.11.jar", "Test"};
+			argv = new String[]{"methods", "/tmp/junit-4.11.jar", "junit.framework.TestResult"};
 		}
 
 		if ("classes".equals(argv[0])){

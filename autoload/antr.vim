@@ -75,7 +75,7 @@ func! antr#ListSymbols(findstart, base)
 endfunc
 
 func! Rf(x)
-	let a:list = split(a:x, "-")
+	let a:list = split(a:x, ";")
 	if len(a:list) == 0 
 		return ""
 	endif
