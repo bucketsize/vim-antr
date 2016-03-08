@@ -10,6 +10,6 @@ command! -nargs=* AntrClean  call SetMakeAsAntClean() | make | copen
 command! -nargs=* AntrParseLibs  call ParseLibDirs()
 
 map <F9>  :call SetMakeAsAntCompile()<Return>:make<Return>:copen<Return>
-
+map <F11> :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
 "map <leader>AntRun  :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
 "map <leader>AntTest :call SetMakeAsAntTest()<CR>:make<CR>:copen<CR>

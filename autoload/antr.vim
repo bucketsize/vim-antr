@@ -12,14 +12,18 @@ let g:antr_plugin_path=expand('<sfile>:p:h')
 
 " entry point to init
 func! antr#Antr()
-	let g:antr_project_path=expand('%:p:h')
+	"let g:antr_project_path=expand('%:p:h')
+	let g:antr_project_path=getcwd()
 
 	" load ruby script (require)
 	exec "rubyf ".g:antr_plugin_path."/antr_tasks.rb"
-	exec "rubyf ".g:antr_plugin_path."/antr_completer.rb"
 
+	" ----------------------------------------------------
+  " deprecating - in favour of javacomplete2
+  " exec "rubyf ".g:antr_plugin_path."/antr_completer.rb"
 	" load libs
-	call ParseLibDirs()
+  " call ParseLibDirs()
+  " ----------------------------------------------------
 endfunc
 
 " func mapping; always delegating to ruby methods
@@ -56,6 +60,9 @@ func! SetMakeAsAntClean()
 	ruby Antr::Tasks.makeClean()
 endfunc
 
+" -----------------------------------------------------------
+" deprecating as the exists better alternatives for java aut-
+" ocomplete, ala. javacomplete2
 func! ParseLibDirs()
 	ruby Antr::Completer.parseLibDirs()
 endfunc
@@ -75,9 +82,10 @@ func! antr#ListSymbols(findstart, base)
 endfunc
 
 func! Rf(x)
-	let a:list = split(a:x, ";")
+	let a:list = split(a:x, "|")
 	if len(a:list) == 0 
 		return ""
 	endif
 	return {'word': a:list[0], 'menu': a:list[1], 'kind': 'f'}
 endfunc
+" -----------------------------------------------------------

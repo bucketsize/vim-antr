@@ -14,10 +14,11 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
+@Deprecated // use javacomplete2 instead
 public class AntrHelper{
 
 	private final String L_DELIM = ",";
-	private final String F_DELIM = ";";
+	private final String F_DELIM = "|";
 
 	private String getClasses(final String jarFilename){
 		StringBuilder classes = new StringBuilder();
@@ -67,7 +68,8 @@ public class AntrHelper{
 				final Method method = methodEntries.next();
 				String methodName="";
 				if ("<init>".equals(method.getName())){
-					methodName = className;
+					int li = className.lastIndexOf(".");
+					methodName = className.substring(li+1);
 				}else{
 					methodName = method.getName();
 				}
