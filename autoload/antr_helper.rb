@@ -32,7 +32,7 @@ module Antr
 		class << self
 
 			def setupMake(builder, cmd, className='_NONE_')
-				if Antr::BuilderFactory::COMMANDS.include?(cmd)
+				if builder.cmd.keys.include?(cmd.to_sym)
 					LOG.info("setupMake #{builder} #{cmd} #{className}")
 
 					LOG.info("let &l:makeprg='#{builder.cmd(className)[cmd.to_sym]}'")
@@ -41,7 +41,7 @@ module Antr
 					LOG.info("let &l:errorformat='#{builder.efm()[cmd.to_sym]}'")
 					VIM::command("let &l:errorformat='#{builder.efm()[cmd.to_sym]}'")
 				else
-					VIM::message("command '#{cmd}' not supported")
+					VIM::message("command '#{cmd}' not supported by #{builder}")
 				end
 			end
 		end

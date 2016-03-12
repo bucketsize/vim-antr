@@ -5,14 +5,14 @@ module Antr
 	# builder using apache ant
 	class AntBuilder
 		include Builder
-
 		# data for make overide
 		def cmd(className='_NONE_') 
 			{
 				:make  => "ant -find build.xml compile",
 				:run   => "ant -find build.xml run-main -Dname=#{className}",
 				:test  => "ant run-test -Dname=#{className}",
-				:clean  => "ant clean"
+				:clean  => "ant clean",
+				:make_run   => "ant -find build.xml compile run-main -Dname=#{className}"
 			}
 		end
 

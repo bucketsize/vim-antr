@@ -40,20 +40,25 @@ funct! CreateProject(pname)
 	ruby Antr::Tasks.createProject(VIM::evaluate('a:pname'))
 endfunc
 
-funct! RunMain(c_name)
-	ruby Antr::Tasks.makeRun(VIM::evaluate('a:c_name'))
+"? deprecated
+"funct! RunMain(c_name)
+	"ruby Antr::Tasks.makeRun(VIM::evaluate('a:c_name'))
+"endfunc
+
+func! SetMakeAsAntCompile()
+	ruby Antr::Tasks.makeCompile()
 endfunc
 
 func! SetMakeAsAntRun()
 	ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
-func! SetMakeAsAntTest()
-	ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
+func! SetMakeAsAntCompileRun()
+	ruby Antr::Tasks.makeCompileRun(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
-func! SetMakeAsAntCompile()
-	ruby Antr::Tasks.makeCompile()
+func! SetMakeAsAntTest()
+	ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
 endfunc
 
 func! SetMakeAsAntClean()

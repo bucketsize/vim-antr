@@ -113,6 +113,12 @@ module Antr
 				className = Antr.className(name)
 				Antr::Make.setupMake(@@builder, 'run', className)
 			end
+			
+      # set up Ant to compile + run a class in a current managed project
+			def makeCompileRun(name)
+				className = Antr.className(name)
+				Antr::Make.setupMake(@@builder, 'make_run', className)
+			end
 
 			# set up Ant to run a junit class in a current managed project
 			def self.makeTest(name)
