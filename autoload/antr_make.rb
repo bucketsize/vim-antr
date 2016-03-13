@@ -13,16 +13,14 @@ module Antr
 	#include VIM
 	#end
 
+  extend Logging
 	class << self
 		def return(val)		
 			VIM::command("let g:rval=\"#{val}\"")
 		end
 		def className(fileName)
-			IO.popen("find -name #{fileName}.class") do |f| 
-				r = f.gets
-				cn = r.split('/classes/')[1].split('.')[0]
-				cn #FQCN
-			end
+      LOG.info("filename: #{fileName}")
+      fileName.split(/\/|\./)[1..-2].join('.')
 		end
 	end
 

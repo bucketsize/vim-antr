@@ -50,15 +50,15 @@ func! SetMakeAsAntCompile()
 endfunc
 
 func! SetMakeAsAntRun()
-	ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%:t:r")'))
+	ruby Antr::Tasks.makeRun(VIM::evaluate('expand("%")'))
 endfunc
 
 func! SetMakeAsAntCompileRun()
-	ruby Antr::Tasks.makeCompileRun(VIM::evaluate('expand("%:t:r")'))
+	ruby Antr::Tasks.makeCompileRun(VIM::evaluate('expand("%")'))
 endfunc
 
 func! SetMakeAsAntTest()
-	ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%:t:r")'))
+	ruby Antr::Tasks.makeTest(VIM::evaluate('expand("%")'))
 endfunc
 
 func! SetMakeAsAntClean()
