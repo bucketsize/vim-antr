@@ -1,6 +1,6 @@
 require 'fileutils'
 
-require_relative 'antr_helper'
+require_relative 'antr_make'
 require_relative 'antr_logger'
 require_relative 'antr_builder_factory'
 require_relative 'antr_completer'
@@ -121,7 +121,7 @@ module Antr
 			end
 
 			# set up Ant to run a junit class in a current managed project
-			def self.makeTest(name)
+			def makeTest(name)
 				className = Antr.className(name)
 				Antr::Make.setupMake(@@builder, 'test', className)
 			end

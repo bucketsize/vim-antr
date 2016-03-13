@@ -12,7 +12,7 @@ command! -nargs=* AntrParseLibs  call ParseLibDirs()
 
 map <F9>  :call SetMakeAsAntCompile()<CR>:make<CR>:copen<CR>
 map <F11> :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
-map <F12> :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
+map <F12> :call SetMakeAsAntCompileRun()<CR>:make<CR>:copen<CR>
 
 " this doesnt work??
 "map <leader>AntRun  :call SetMakeAsAntRun()<CR>:make<CR>:copen<CR>
